@@ -1,4 +1,15 @@
 from tkinter import *
+import yake
+
+# Specifying parameters for keyword extractor using YAKE
+language = "en"
+max_ngram_size = 3
+deduplication_threshold = 0.9
+deduplication_algo = 'seqm'
+windowSize = 1
+numofKeywords = 10
+
+kw_extractor = yake.KeywordExtractor(lan=language, n=max_ngram_size, dedupLim=deduplication_threshold, dedupFunc=deduplication_algo, windowsSize=windowSize, top=numofKeywords, features=None)
 
 window = Tk()
 window.title("Keyword Extractor")
@@ -19,8 +30,10 @@ def check_keywords():
 # Print input from text box
 def print_output():
     output_text = input_textbox.get("1.0", "end-1c")
-    output_textbox.insert("1.0", output_text)
-    print(output_text)
+    keywords = kw_extractor.extract_keywords(output_text)
+    keywords = '\n'.join(str(kw) for kw in keywords)
+    output_textbox.insert("1.0", keywords)
+    print(keywords)
 
 def main():
     check_keywords()
